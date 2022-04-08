@@ -31,15 +31,16 @@ function App() {
         });
 
         // @ts-ignore
-        const data = await fetch(process.env.REACT_APP_ETHER_SCAN_URL);
-        const res = await data.json();
-        console.log({ res });
+        // const data = await fetch(process.env.REACT_APP_ETHER_SCAN_URL);
+        // const res = await data.json();
+        // console.log({ res });
 
         // @ts-ignore
         const balance = await provider.request({
           method: "eth_getBalance",
           params: [process.env.REACT_APP_META_MASK_KEY, "latest"],
         });
+        console.log({ balance });
 
         setcurrentBalance(Number.parseInt(balance, 16) * 10 ** -18);
       } else {
@@ -60,7 +61,7 @@ function App() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Learn How to MAKERO, You currently have ${currentBalance} wei
+          Learn How to MAKERO, You currently have ${currentBalance} ETH
         </a>
       </header>
     </div>
