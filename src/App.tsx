@@ -5,6 +5,7 @@ import "./App.css";
 
 function App() {
   const [currentBalance, setcurrentBalance] = useState(0);
+  const [ethSupply, setEthSupply] = useState(0);
   useEffect(() => {
     (async () => {
       const provider = await detectEthereumProvider();
@@ -31,9 +32,15 @@ function App() {
         });
 
         // @ts-ignore
-        // const data = await fetch(process.env.REACT_APP_ETHER_SCAN_URL);
+        const { result } = await (
+          await fetch(
+            `https://api-ropsten.etherscan.io/api?module=account&action=txlistinternal&address=${process.env.REACT_APP_META_MASK_KEY}&startblock=0&endblock=2702578&page=1&offset=10&sort=asc&apikey=${process.env.REACT_APP_ETHER_SCAN_URL}`
+          )
+        ).json();
+
+        console.log({ result });
+
         // const res = await data.json();
-        // console.log({ res });
 
         // @ts-ignore
         const balance = await provider.request({
@@ -43,6 +50,8 @@ function App() {
         console.log({ balance });
 
         setcurrentBalance(Number.parseInt(balance, 16) * 10 ** -18);
+
+        setEthSupply(result);
       } else {
         // if the provider is not detected, detectEthereumProvider resolves to null
         console.error("Please install MetaMask!");
@@ -63,6 +72,9 @@ function App() {
         >
           Learn How to MAKERO, You currently have ${currentBalance} ETH
         </a>
+        <ul>
+          <li>There is currently {ethSupply} ETH in circulation</li>
+        </ul>
       </header>
     </div>
   );
