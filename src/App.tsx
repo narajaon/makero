@@ -53,22 +53,23 @@ function useEthProvider() {
     })();
   }, [requestAccountsCB]);
 
-  return { requestAccountsCB, account, isLoading };
+  return {
+    onClickCB: async () => {
+      await requestAccountsCB("eth_requestAccounts");
+      window.location.reload();
+    },
+    account,
+    isLoading,
+  };
 }
 
 function App() {
-  const { requestAccountsCB, account, isLoading } = useEthProvider();
+  const { account, onClickCB, isLoading } = useEthProvider();
 
   return (
     <div className="App">
       {!account ? (
-        <button
-          onClick={async () => {
-            await requestAccountsCB("eth_requestAccounts");
-            window.location.reload();
-          }}
-          disabled={isLoading}
-        >
+        <button onClick={onClickCB} disabled={isLoading}>
           {isLoading ? "Loading" : "Connect your wallet"}
         </button>
       ) : (
