@@ -4,7 +4,7 @@ import "./App.css";
 
 function useEthProvider() {
   const [metamaskProvider, setProvider] = useState(null) as any;
-  const [account, setAccount] = useState(null);
+  const [account, setAccount] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
   const requestAccountsCB = useCallback(
@@ -38,6 +38,13 @@ function useEthProvider() {
         if (provider) {
           setProvider(provider);
           requestAccountsCB("eth_accounts");
+          provider.on("accountsChanged", async (accounts: string[]) => {
+            if (accounts.length === 0) {
+              return;
+            }
+
+            setAccount(accounts[0]);
+          });
         }
       } catch (error) {
         console.log(error);
@@ -61,13 +68,10 @@ function App() {
           }}
           disabled={isLoading}
         >
-          {isLoading ? "LOADING" : "CONNECT YOUR WALLET"}
+          {isLoading ? "Loading" : "Connect your wallet"}
         </button>
       ) : (
-        <div>
-          <div>YOUR WALLET IS CONNECTED</div>
-          <div>Your account is: {account}</div>
-        </div>
+        <div>{account}</div>
       )}
     </div>
   );
