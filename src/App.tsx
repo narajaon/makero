@@ -33,7 +33,9 @@ function useEthProvider() {
   useEffect(() => {
     (async () => {
       try {
-        const provider = (await detectEthereumProvider()) as any;
+        const provider = (await detectEthereumProvider({
+          mustBeMetaMask: true,
+        })) as any;
 
         if (provider) {
           setProvider(provider);
