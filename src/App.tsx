@@ -47,6 +47,9 @@ function useEthProvider() {
 
             setAccount(accounts[0]);
           });
+          provider.on("chainChanged", async () => {
+            window.location.reload();
+          });
         }
       } catch (error) {
         console.log(error);
