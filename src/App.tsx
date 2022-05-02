@@ -40,12 +40,8 @@ function useEthProvider() {
         if (provider) {
           setProvider(provider);
           requestAccountsCB("eth_accounts");
-          provider.on("accountsChanged", async (accounts: string[]) => {
-            if (accounts.length === 0) {
-              return;
-            }
-
-            setAccount(accounts[0]);
+          provider.on("accountsChanged", async () => {
+            window.location.reload();
           });
           provider.on("chainChanged", async () => {
             window.location.reload();
